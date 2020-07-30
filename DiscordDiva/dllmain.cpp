@@ -4,6 +4,8 @@
 #include <detours.h>
 #pragma comment(lib, "detours.lib")
 
+HANDLE gConsole = GetStdHandle(STD_OUTPUT_HANDLE); // For use of SetConsoleTextAttribute()
+
 char* IS_PLAYING_GAME = (char*)0x140d1e480;
 char* IS_PV = (char*)0x14cc53b6d;
 char* DIFFICULTY = (char*)0x14cc12444;
@@ -84,8 +86,24 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-		std::cout << DISCORD_PREFIX_ << "Loading DiscordDiva..." << std::endl;
-		std::cout << DISCORD_PREFIX_ << "Injecting hooks" << std::endl;
+
+		// Logs (Loading DiscordDiva)
+		std::cout << "[";
+		SetConsoleTextAttribute(gConsole, 11);
+		std::cout << DISCORD_PREFIX_;
+		SetConsoleTextAttribute(gConsole, 7);
+		std::cout << "] ";
+		std::cout << "Loading DiscordDiva..." << std::endl;
+		SetConsoleTextAttribute(gConsole, 7);
+
+		// Logs (Injecting Hooks)
+		std::cout << "[";
+		SetConsoleTextAttribute(gConsole, 11);
+		std::cout << DISCORD_PREFIX_;
+		SetConsoleTextAttribute(gConsole, 7);
+		std::cout << "] ";
+		std::cout << "Injecting hooks" << std::endl;
+		SetConsoleTextAttribute(gConsole, 7);
 
 		//InstallHook((void*)0x1400dfaf8, (void*)OnGameStateChange, 17);
 		DisableThreadLibraryCalls(hModule);
@@ -101,7 +119,15 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		DetourAttach(&(PVOID&)divaSongEnd, (PVOID)hookedDivaSongEnd);
 		DetourTransactionCommit();
 
-		std::cout << DISCORD_PREFIX_ << "Connecting to Discord" << std::endl;
+		// Logs (Connecting to Discord)
+		std::cout << "[";
+		SetConsoleTextAttribute(gConsole, 11);
+		std::cout << DISCORD_PREFIX_;
+		SetConsoleTextAttribute(gConsole, 7);
+		std::cout << "] ";
+		std::cout << "Connecting to Discord" << std::endl;
+		SetConsoleTextAttribute(gConsole, 7);
+
 		SetupDiscord();
 		break;
 	case DLL_THREAD_ATTACH:

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiscordDiva", "DiscordDiva\DiscordDiva.vcxproj", "{93CA3288-C0B3-4552-B222-F7615E81365D}"
 EndProject
@@ -13,8 +13,8 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93CA3288-C0B3-4552-B222-F7615E81365D}.Debug|x64.ActiveCfg = Debug|x64
-		{93CA3288-C0B3-4552-B222-F7615E81365D}.Debug|x64.Build.0 = Debug|x64
+		{93CA3288-C0B3-4552-B222-F7615E81365D}.Debug|x64.ActiveCfg = Release|x64
+		{93CA3288-C0B3-4552-B222-F7615E81365D}.Debug|x64.Build.0 = Release|x64
 		{93CA3288-C0B3-4552-B222-F7615E81365D}.Debug|x86.ActiveCfg = Debug|Win32
 		{93CA3288-C0B3-4552-B222-F7615E81365D}.Debug|x86.Build.0 = Debug|Win32
 		{93CA3288-C0B3-4552-B222-F7615E81365D}.Release|x64.ActiveCfg = Release|x64
