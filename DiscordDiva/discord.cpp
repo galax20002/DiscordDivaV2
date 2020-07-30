@@ -405,7 +405,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			// if to show the color circule of the Difficulty
 			if (DifficultyToString(difficulty) == "Easy")
 			{
-				strcpy_s(activity.assets.small_image, "easy");
+				strcpy_s(activity.assets.small_image, "d-easy");
 				
 				SetConsoleTextAttribute(hConsole, 11);
 				std::cout << "Easy";
@@ -414,7 +414,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "Normal")
 			{
-				strcpy_s(activity.assets.small_image, "normal");
+				strcpy_s(activity.assets.small_image, "d-normal");
 
 				SetConsoleTextAttribute(hConsole, 10);
 				std::cout << "Normal";
@@ -422,7 +422,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "Hard")
 			{
-				strcpy_s(activity.assets.small_image, "hard");
+				strcpy_s(activity.assets.small_image, "d-hard");
 
 				SetConsoleTextAttribute(hConsole, 14);
 				std::cout << "Hard";
@@ -430,7 +430,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "Extreme")
 			{
-				strcpy_s(activity.assets.small_image, "extreme");
+				strcpy_s(activity.assets.small_image, "d-extreme");
 
 				SetConsoleTextAttribute(hConsole, 12);
 				std::cout << "Extreme";
@@ -438,7 +438,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "EX-Extreme")
 			{
-				strcpy_s(activity.assets.small_image, "ex-extreme");
+				strcpy_s(activity.assets.small_image, "d-ex-extreme");
 
 				SetConsoleTextAttribute(hConsole, 13);
 				std::cout << "EX-Extreme";
