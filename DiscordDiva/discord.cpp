@@ -436,12 +436,12 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 				std::cout << "Extreme";
 				SetConsoleTextAttribute(hConsole, 7);
 			}
-			else if (DifficultyToString(difficulty) == "EX-Extreme")
+			else if (DifficultyToString(difficulty) == "EX Extreme")
 			{
 				strcpy_s(activity.assets.small_image, "d-ex-extreme");
 
 				SetConsoleTextAttribute(hConsole, 13);
-				std::cout << "EX-Extreme";
+				std::cout << "EX Extreme";
 				SetConsoleTextAttribute(hConsole, 7);
 			}
 			else {
