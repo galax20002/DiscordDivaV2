@@ -88,6 +88,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	case DLL_PROCESS_ATTACH:
 
 		// Logs (Loading DiscordDiva)
+		SetConsoleTextAttribute(gConsole, 7);
 		std::cout << "[";
 		SetConsoleTextAttribute(gConsole, 11);
 		std::cout << DISCORD_PREFIX_;
