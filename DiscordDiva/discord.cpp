@@ -423,7 +423,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			break;
 
 		case 1: // Kagamine Rin
-			std::cout << "Hatsune Miku";
+			std::cout << "Kagamine Rin";
 			break;
 
 		case 2: // Kagamine Len
@@ -431,7 +431,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			break;
 
 		case 3:	// Megurine Luka
-			std::cout << "Kagamine Len";
+			std::cout << "Megurine Luka";
 			break;
 
 		case 4:	// Akita Neru
