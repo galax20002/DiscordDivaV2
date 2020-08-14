@@ -1,5 +1,5 @@
 ﻿
-![](https://img.shields.io/badge/Skins-49%20(10%20are%20default))-blueviolet?style=for-the-badge)
+![](https://img.shields.io/badge/Skins-49%20-%2010%20are%20default-blueviolet?style=for-the-badge)
 
 ## Skins
 
