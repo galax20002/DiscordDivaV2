@@ -1,6 +1,7 @@
 # DiscordDiva v2
 
 ![](https://img.shields.io/github/v/release/nevespt/DiscordDivaV2?style=for-the-badge)
+![](https://img.shields.io/github/license/nevespt/DiscordDivaV2?style=for-the-badge)
 
 ![](https://cld.pt/dl/download/2c8a14a8-5078-4836-838f-e8353d8e55d6/Sem%20nome.png)
 
