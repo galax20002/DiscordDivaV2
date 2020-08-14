@@ -1,7 +1,7 @@
 ﻿
 ## Skins
 
-|                |SKIN                           |PORTAIT                        |
+|                |SKIN                           |PORTRAIT                        |
 |----------------|-------------------------------|-----------------------------|
 |**Hatsune Miku**|Default|![](https://cdn.discordapp.com/app-assets/737853290611736606/738489734543704627.png)|
 ||White One Piece|![](https://cdn.discordapp.com/app-assets/737853290611736606/738520635193557042.png)|
