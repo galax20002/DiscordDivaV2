@@ -1,4 +1,4 @@
-# DiscordDiva
+# DiscordDiva v2
 
 ![](https://cld.pt/dl/download/2c8a14a8-5078-4836-838f-e8353d8e55d6/Sem%20nome.png)
 
