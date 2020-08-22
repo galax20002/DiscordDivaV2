@@ -10,6 +10,6 @@
 
 
 void SetupDiscord();
-void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart);
+void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart, bool isGamePaused);
 void StopDiscord();
 void DiscordThread(void*);

@@ -2,6 +2,9 @@
 #include "discord.h"
 #include  <locale.h>  		// setlocale()
 #include <fcntl.h>
+#include "config.h"
+
+bool showRivalId = GetBooleanValue(L"show_rival_id");
 
 #pragma execution_character_set( "utf-8" )
 
@@ -87,14 +90,14 @@ void UpdateActivityCallback(void* data, enum EDiscordResult result)
 	if (result == DiscordResult_Ok)
 	{
 		// Logs (Updated)
-		std::cout << "[";
+		/*std::cout << "[";
 		SetConsoleTextAttribute(hConsole, 11);
 		std::cout << DISCORD_PREFIX_;
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << "] ";
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << "Activity updated!" << std::endl << std::endl;
-		SetConsoleTextAttribute(hConsole, 7);
+		SetConsoleTextAttribute(hConsole, 7);*/
 	}
 	else
 	{
@@ -113,22 +116,23 @@ void UpdateActivityCallback(void* data, enum EDiscordResult result)
 
 }
 
-void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart) {
+void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart, bool isGamePaused) {
 	
 	int idOfSong = *(int*)0x140CDD8E0;
 	// info about the 1st singer
 	int currentChars = *(int*)0x1411B76D8;
 	int currentModule = *(int*)0x1411A8A10;
+	int accountid = *(int*)0x1411A8920;
 
 	// Logs (Updating)
-	std::cout << "[";
+	/*std::cout << "[";
 	SetConsoleTextAttribute(hConsole, 11);
 	std::cout << DISCORD_PREFIX_;
 	SetConsoleTextAttribute(hConsole, 7);
 	std::cout << "] ";
 	SetConsoleTextAttribute(hConsole, 8);
 	std::cout << "Updating activity" << std::endl;
-	SetConsoleTextAttribute(hConsole, 7);
+	SetConsoleTextAttribute(hConsole, 7);*/
 
 
 	struct DiscordActivity activity;
@@ -471,7 +475,16 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 		printf("%s", songName);
 		/*std::wcout << songName;*/
 		SetConsoleTextAttribute(hConsole, 7);
-		std::cout << " on ";
+		
+		if (isGamePaused)
+		{
+			std::cout << " PAUSED on ";
+		}
+		else
+		{
+			std::cout << " on ";
+		}
+		
 
 		if (isPV) {
 			strcpy_s(activity.state, "Watching a PV");
@@ -480,13 +493,30 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 		}
 		else {
 			// Difficulty
-			sprintf_s(activity.state, "Playing at %s", DifficultyToString(difficulty));
+			int DifficultyStars = *(int*)0x140CDD8E0;
+			if(isGamePaused)
+			{
+				sprintf_s(activity.state, "PAUSED at %s", DifficultyToString(difficulty));
+			}
+			else
+			{
+				sprintf_s(activity.state, "Playing at %s", DifficultyToString(difficulty));
+			}
+			
 			sprintf_s(activity.assets.small_text, "%s", DifficultyToString(difficulty));
 
 			// if to show the color circule of the Difficulty
 			if (DifficultyToString(difficulty) == "Easy")
 			{
-				strcpy_s(activity.assets.small_image, "d-easy");
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-easy-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-easy");
+				}
+				
 				
 				SetConsoleTextAttribute(hConsole, 11);
 				std::cout << "Easy";
@@ -495,7 +525,14 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "Normal")
 			{
-				strcpy_s(activity.assets.small_image, "d-normal");
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-normal-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-normal");
+				}
 
 				SetConsoleTextAttribute(hConsole, 10);
 				std::cout << "Normal";
@@ -503,7 +540,14 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "Hard")
 			{
-				strcpy_s(activity.assets.small_image, "d-hard");
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-hard-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-hard");
+				}
 
 				SetConsoleTextAttribute(hConsole, 14);
 				std::cout << "Hard";
@@ -511,7 +555,14 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "Extreme")
 			{
-				strcpy_s(activity.assets.small_image, "d-extreme");
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-extreme-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-extreme");
+				}
 
 				SetConsoleTextAttribute(hConsole, 12);
 				std::cout << "Extreme";
@@ -519,7 +570,14 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			}
 			else if (DifficultyToString(difficulty) == "EX Extreme")
 			{
-				strcpy_s(activity.assets.small_image, "d-ex-extreme");
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-ex-extreme-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-ex-extreme");
+				}
 
 				SetConsoleTextAttribute(hConsole, 13);
 				std::cout << "EX Extreme";
@@ -532,15 +590,29 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 			std::cout << std::endl;
 			SetConsoleTextAttribute(hConsole, 7);
 
-			activity.timestamps.start = timeSinceStart;
+
+			if (isGamePaused)
+			{
+				
+			}
+			else
+			{
+				activity.timestamps.start = timeSinceStart;
+			}
+			
 		}
 	}
 	else
 	{
 		strcpy_s(activity.assets.large_image, "icon0");
 		strcpy_s(activity.assets.large_text, "");
-		strcpy_s(activity.state, "Waiting for a song!");
+		strcpy_s(activity.details, "Waiting for a song!");
+		if (showRivalId && accountid != 4294967295)
+		{
+			sprintf_s(activity.state, "Rival iD: %i", accountid);
+		}
 		strcpy_s(activity.assets.small_image, "None");
+		
 
 	}
 	coreMutex.lock();

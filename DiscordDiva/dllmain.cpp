@@ -10,6 +10,7 @@ char* IS_PLAYING_GAME = (char*)0x140d1e480;
 char* IS_PV = (char*)0x14cc53b6d;
 char* DIFFICULTY = (char*)0x14cc12444;
 char* IS_EXTRA = (char*)0x14cc12448;
+bool isGamePaused = false;
 
 Difficulty GetDifficulty() {
 	if (*IS_EXTRA) {
@@ -44,39 +45,76 @@ void GetSongName(char* buffer, rsize_t bufferSize) {
 }
 
 char lastState = 0x01;
+time_t songStartTime, playTime;
 
 void OnGameStateChange() {
 	auto song = GetSongData();
 	//Filter out the Dummy stage
 	char isPlayingGame = song.songID == 999 ? 0 : *IS_PLAYING_GAME;
-	if (isPlayingGame != lastState)
-	{
+
+
 		char songName[100];
 		lastState = isPlayingGame;
-		time_t ltime;
-		time(&ltime);
+
+		time_t activityTime;
+		if (isGamePaused)
+		{
+			time_t now; time(&now);
+			playTime = now - songStartTime;
+			activityTime = now;
+		}
+		else
+		{
+			time(&songStartTime);
+			songStartTime -= playTime;
+			activityTime = songStartTime;
+		}
+
 		//Getting the song name has turned out to be quite a challenge. If it isn't required, don't do it.
 		if (isPlayingGame)
 		{
 			GetSongName(song, songName, sizeof(songName));
 		}
-		ChangeActivity(isPlayingGame, songName, *IS_PV, GetDifficulty(), (long long)ltime);
-	}
+		ChangeActivity(isPlayingGame, songName, *IS_PV, GetDifficulty(), (long long)activityTime, isGamePaused);
+	
 }
 
 signed __int64 hookedDivaSongStart(__int64 a1, __int64 a2)
 {
+	isGamePaused = false;
 	divaSongStart(a1, a2);
+	playTime = 0;
 	OnGameStateChange();
 	return 0;
 }
 
 signed __int64 hookedDivaSongEnd(__int64 a1)
 {
+	isGamePaused = false;
 	divaSongEnd(a1);
 	OnGameStateChange();
 	return 0;
 }
+
+void hookedDivaPaused()
+{
+	isGamePaused = true;
+	divaPaused();
+	OnGameStateChange();
+}
+
+void hookedDivaUnpaused()
+{
+	isGamePaused = false;
+	divaUnpaused();
+	OnGameStateChange();
+}
+
+void hookedDivaPauseThunk() {
+	// this replaces a thunk from the game so that calls via it won't trigger the paused hook here
+	divaPaused();
+}
+
 
 BOOL APIENTRY DllMain(HMODULE hModule,
 	DWORD  ul_reason_for_call,
@@ -120,6 +158,12 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		DetourAttach(&(PVOID&)divaSongEnd, (PVOID)hookedDivaSongEnd);
 		DetourTransactionCommit();
 
+		//InstallHook to pause and unpause
+		DetourTransactionBegin();
+		DetourAttach(&(PVOID&)divaPaused, (PVOID)hookedDivaPaused);
+		DetourAttach(&(PVOID&)divaUnpaused, (PVOID)hookedDivaUnpaused);
+		DetourTransactionCommit();
+
 		// Logs (Connecting to Discord)
 		std::cout << "[";
 		SetConsoleTextAttribute(gConsole, 11);
@@ -139,4 +183,25 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		break;
 	}
 	return TRUE;
+}
+
+
+const wchar_t* CONFIG_FILE1 = getConfigFilePath();
+PluginConfig::PluginConfigOption config[] = {
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"show_rival_id", L"general", CONFIG_FILE1, L"Show Rival ID", L"Show your rival ID in your status.", false } },
+};
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
+{
+	return L"DiscordDiva v2";
+}
+
+extern "C" __declspec(dllexport) LPCWSTR GetPluginDescription(void)
+{
+	return L"DiscordDiva v2 plugin by NevesPT\n(forked from original DiscordDiva by bela333)\n\nEnables Discord rich presence for the game.";
+}
+
+extern "C" __declspec(dllexport) PluginConfig::PluginConfigArray GetPluginOptions(void)
+{
+	return PluginConfig::PluginConfigArray{ _countof(config), config };
 }

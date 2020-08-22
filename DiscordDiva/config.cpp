@@ -12,6 +12,10 @@ std::wstring DirPath() {
 std::wstring CONFIG_FILE_STRING = DirPath() + L"\\plugins\\discorddiva.ini";
 const wchar_t* CONFIG_FILE = CONFIG_FILE_STRING.c_str();
 
+const wchar_t* getConfigFilePath() {
+	return CONFIG_FILE_STRING.c_str();
+}
+
 void GetOverrideName(int songID, char* defaultName, char* buffer, rsize_t bufferSize) {
 	wchar_t configID[7]; //pv_000\0
 	swprintf_s(configID, L"pv_%03d", songID);
@@ -21,8 +25,8 @@ void GetOverrideName(int songID, char* defaultName, char* buffer, rsize_t buffer
 	MultiByteToWideChar(CP_UTF8, 0, defaultName, -1, wDefaultName, lenDefaultName);
 
 	//Populate wBuffer with either the default name or the override
-	wchar_t* wBuffer = new wchar_t[bufferSize*2];
-	GetPrivateProfileStringW(L"override", configID, wDefaultName, wBuffer, bufferSize*2, CONFIG_FILE);
+	wchar_t* wBuffer = new wchar_t[bufferSize * 2];
+	GetPrivateProfileStringW(L"override", configID, wDefaultName, wBuffer, bufferSize * 2, CONFIG_FILE);
 
 	int lenName = WideCharToMultiByte(CP_UTF8, 0, wBuffer, -1, 0, 0, 0, 0);
 	char* name = new char[lenName];
@@ -33,5 +37,9 @@ void GetOverrideName(int songID, char* defaultName, char* buffer, rsize_t buffer
 	delete[] wBuffer;
 	delete[] wDefaultName;
 	delete[] name;
-	
+
+}
+
+bool GetBooleanValue(wchar_t* setting) {
+	return GetPrivateProfileIntW(L"general", setting, 0, CONFIG_FILE) > 0 ? true : false;
 }
