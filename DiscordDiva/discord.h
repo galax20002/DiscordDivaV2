@@ -9,7 +9,8 @@
 #include <mutex>
 
 
-void SetupDiscord();
+void SetupDiscord(int songID);
 void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart, bool isGamePaused);
+void ChangeActivity2(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart, bool isGamePaused);
 void StopDiscord();
 void DiscordThread(void*);

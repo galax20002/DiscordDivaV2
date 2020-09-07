@@ -5,6 +5,8 @@
 #include "config.h"
 
 bool showRivalId = GetBooleanValue(L"show_rival_id");
+bool showAlbum = GetBooleanValue(L"show_albuns_art");
+bool showExtraExtreme = GetBooleanValue(L"change_extra");
 
 #pragma execution_character_set( "utf-8" )
 
@@ -32,7 +34,7 @@ void DiscordThread(void*) {
 	}
 
 }
-void SetupDiscord() {
+void SetupDiscord(int songID) {
 	EDiscordResult result;
 	struct DiscordCreateParams params;
 
@@ -46,7 +48,32 @@ void SetupDiscord() {
 	SetConsoleTextAttribute(hConsole, 7);
 
 	DiscordCreateParamsSetDefault(&params);
-	params.client_id = 737853290611736606;
+
+	if (showAlbum && songID > 0 && songID <= 200) {
+		params.client_id = 746893019269300274;
+	}
+	else if (showAlbum && songID > 200 && songID <= 300)
+	{
+		params.client_id = 746943440356638811;
+	}
+	else if (showAlbum && songID > 400 && songID <= 700)
+	{
+		params.client_id = 746952987548844044;
+	}
+	else if (showAlbum && songID > 700 && songID <= 800)
+	{
+		params.client_id = 746953051213922405;
+	}
+	else if (showAlbum && songID > 800)
+	{
+		params.client_id = 746953096332050573;
+	}
+	else 
+	{
+		params.client_id = 737853290611736606;
+	}
+
+	//params.client_id = 737853290611736606;
 	params.flags = DiscordCreateFlags_NoRequireDiscord;
 
 	// Logs (Creating Client)
@@ -118,6 +145,7 @@ void UpdateActivityCallback(void* data, enum EDiscordResult result)
 
 void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart, bool isGamePaused) {
 	
+
 	int idOfSong = *(int*)0x140CDD8E0;
 	// info about the 1st singer
 	int currentChars = *(int*)0x1411B76D8;
@@ -613,6 +641,308 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 		}
 		strcpy_s(activity.assets.small_image, "None");
 		
+
+	}
+	coreMutex.lock();
+	if (activities == nullptr || core == nullptr)
+	{
+		coreMutex.unlock();
+		return;
+	}
+	activities->update_activity(activities, &activity, NULL, UpdateActivityCallback);
+	coreMutex.unlock();
+}
+
+
+void ChangeActivity2(int isPlaying, char* songName, int isPV, Difficulty difficulty, long long timeSinceStart, bool isGamePaused) {
+
+
+	int idOfSong = *(int*)0x140CDD8E0;
+	// info about the 1st singer
+	int currentChars = *(int*)0x1411B76D8;
+	int currentModule = *(int*)0x1411A8A10;
+	int accountid = *(int*)0x1411A8920;
+
+	// Logs (Updating)
+	/*std::cout << "[";
+	SetConsoleTextAttribute(hConsole, 11);
+	std::cout << DISCORD_PREFIX_;
+	SetConsoleTextAttribute(hConsole, 7);
+	std::cout << "] ";
+	SetConsoleTextAttribute(hConsole, 8);
+	std::cout << "Updating activity" << std::endl;
+	SetConsoleTextAttribute(hConsole, 7);*/
+
+
+	struct DiscordActivity activity;
+	memset(&activity, 0, sizeof(activity));
+
+	
+
+	// Show album art
+	if (idOfSong == 401 && DifficultyToString(difficulty) == "Hard"		 ||
+		idOfSong == 401 && DifficultyToString(difficulty) == "Extreme"	 ||
+		idOfSong == 401 && DifficultyToString(difficulty) == "EX Extreme"||
+		idOfSong == 403 && DifficultyToString(difficulty) == "Hard"		 ||
+		idOfSong == 403 && DifficultyToString(difficulty) == "Extreme"	 ||
+		idOfSong == 403 && DifficultyToString(difficulty) == "EX Extreme"	  )
+	{
+		// Show the Album art for hard
+		sprintf_s(activity.assets.large_image, "song_jk%03d_ex", idOfSong);
+	}
+	else
+	{
+		sprintf_s(activity.assets.large_image, "song_jk%03d", idOfSong);
+	}
+	sprintf_s(activity.assets.large_text, "ID: %03d", idOfSong);
+
+
+
+
+	/*strcpy_s(activity.assets.large_image, "icon");*/
+	/*strcpy_s(activity.assets.large_text, "Hatsune Miku: Project DIVA Arcade Future Tone");*/
+	if (isPlaying)
+	{
+		// song name
+		strcpy_s(activity.details, songName);
+
+		// Logs (name song)
+		std::cout << "[";
+		SetConsoleTextAttribute(hConsole, 11);
+		std::cout << DISCORD_PREFIX_;
+		SetConsoleTextAttribute(hConsole, 7);
+		std::cout << "] ";
+		std::cout << "ID: ";
+		SetConsoleTextAttribute(hConsole, 8);
+		std::cout << idOfSong;
+		SetConsoleTextAttribute(hConsole, 7);
+		std::cout << " - Chars: ";
+		SetConsoleTextAttribute(hConsole, 8);
+
+		switch (currentChars)
+		{
+		case 0:	// Hatsune Miku
+			std::cout << "Hatsune Miku";
+			break;
+
+		case 1: // Kagamine Rin
+			std::cout << "Kagamine Rin";
+			break;
+
+		case 2: // Kagamine Len
+			std::cout << "Kagamine Len";
+			break;
+
+		case 3:	// Megurine Luka
+			std::cout << "Megurine Luka";
+			break;
+
+		case 4:	// Akita Neru
+			std::cout << "Akita Neru";
+			break;
+
+		case 5:	// Yowane Haku
+			std::cout << "Yowane Haku";
+			break;
+
+
+		case 6:	// KAITO
+			std::cout << "KAITO";
+			break;
+
+		case 7:	// MEIKO
+			std::cout << "MEIKO";
+			break;
+
+		case 8:	// Sakine MEIKO
+			std::cout << "Sakine MEIKO";
+			break;
+
+		case 9:	// Kasane Teto
+			std::cout << "Kasane Teto";
+			break;
+
+		default:
+			std::cout << "Unknown";
+			break;
+		}
+
+		SetConsoleTextAttribute(hConsole, 7);
+		std::cout << " - Song: ";
+		SetConsoleTextAttribute(hConsole, 8);
+		SetConsoleOutputCP(65001);
+		printf("%s", songName);
+		/*std::wcout << songName;*/
+		SetConsoleTextAttribute(hConsole, 7);
+
+		if (isGamePaused)
+		{
+			std::cout << " PAUSED on ";
+		}
+		else
+		{
+			std::cout << " on ";
+		}
+
+
+		if (isPV) {
+			strcpy_s(activity.state, "Watching a PV");
+			strcpy_s(activity.assets.small_text, "PV Mode");
+			strcpy_s(activity.assets.small_image, "pv");
+		}
+		else {
+			// Difficulty
+			int DifficultyStars = *(int*)0x140CDD8E0;
+
+			if (isGamePaused)
+			{
+				if (showExtraExtreme && DifficultyToString(difficulty) == "EX Extreme")
+				{
+					sprintf_s(activity.state, "PAUSED on Extra Extreme");
+				}
+				else
+				{
+					sprintf_s(activity.state, "PAUSED on %s", DifficultyToString(difficulty));
+				}
+				
+			}
+			else
+			{
+				if (showExtraExtreme && DifficultyToString(difficulty) == "EX Extreme")
+				{
+					sprintf_s(activity.state, "Playing on Extra Extreme");
+				}
+				else
+				{
+					sprintf_s(activity.state, "Playing on %s", DifficultyToString(difficulty));
+				}
+			}
+
+			if (showExtraExtreme && DifficultyToString(difficulty) == "EX Extreme")
+			{
+				sprintf_s(activity.assets.small_text, "Extra Extreme");
+			}
+			else
+			{
+				sprintf_s(activity.assets.small_text, "%s", DifficultyToString(difficulty));
+			}
+
+			// if to show the color circule of the Difficulty
+			if (DifficultyToString(difficulty) == "Easy")
+			{
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-easy-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-easy");
+				}
+
+
+				SetConsoleTextAttribute(hConsole, 11);
+				std::cout << "Easy";
+				SetConsoleTextAttribute(hConsole, 7);
+
+			}
+			else if (DifficultyToString(difficulty) == "Normal")
+			{
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-normal-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-normal");
+				}
+
+				SetConsoleTextAttribute(hConsole, 10);
+				std::cout << "Normal";
+				SetConsoleTextAttribute(hConsole, 7);
+			}
+			else if (DifficultyToString(difficulty) == "Hard")
+			{
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-hard-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-hard");
+				}
+
+				SetConsoleTextAttribute(hConsole, 14);
+				std::cout << "Hard";
+				SetConsoleTextAttribute(hConsole, 7);
+			}
+			else if (DifficultyToString(difficulty) == "Extreme")
+			{
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-extreme-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-extreme");
+				}
+
+				SetConsoleTextAttribute(hConsole, 12);
+				std::cout << "Extreme";
+				SetConsoleTextAttribute(hConsole, 7);
+			}
+			else if (DifficultyToString(difficulty) == "EX Extreme")
+			{
+				if (isGamePaused)
+				{
+					strcpy_s(activity.assets.small_image, "d-ex-extreme-pause1");
+				}
+				else
+				{
+					strcpy_s(activity.assets.small_image, "d-ex-extreme");
+				}
+
+				SetConsoleTextAttribute(hConsole, 13);
+				if (showExtraExtreme && DifficultyToString(difficulty) == "EX Extreme")
+				{
+					std::cout << "Extra Extreme";
+				}
+				else
+				{
+					std::cout << "EX Extreme";
+				}
+				
+				SetConsoleTextAttribute(hConsole, 7);
+			}
+			else {
+				strcpy_s(activity.assets.small_image, "None");
+			}
+
+			std::cout << std::endl;
+			SetConsoleTextAttribute(hConsole, 7);
+
+
+			if (isGamePaused)
+			{
+
+			}
+			else
+			{
+				activity.timestamps.start = timeSinceStart;
+			}
+
+		}
+	}
+	else
+	{
+		strcpy_s(activity.assets.large_image, "icon0");
+		strcpy_s(activity.assets.large_text, "");
+		strcpy_s(activity.details, "Waiting for a song!");
+		if (showRivalId && accountid != 4294967295)
+		{
+			sprintf_s(activity.state, "Rival iD: %i", accountid);
+		}
+		strcpy_s(activity.assets.small_image, "None");
+
 
 	}
 	coreMutex.lock();

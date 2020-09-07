@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "difficulty.h"
 
+
 char* DifficultyToString(Difficulty difficulty) {
 	switch (difficulty)
 	{

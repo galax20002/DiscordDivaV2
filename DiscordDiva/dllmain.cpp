@@ -11,6 +11,7 @@ char* IS_PV = (char*)0x14cc53b6d;
 char* DIFFICULTY = (char*)0x14cc12444;
 char* IS_EXTRA = (char*)0x14cc12448;
 bool isGamePaused = false;
+bool showAlbum2 = GetBooleanValue(L"show_albuns_art");
 
 Difficulty GetDifficulty() {
 	if (*IS_EXTRA) {
@@ -75,8 +76,14 @@ void OnGameStateChange() {
 		{
 			GetSongName(song, songName, sizeof(songName));
 		}
-		ChangeActivity(isPlayingGame, songName, *IS_PV, GetDifficulty(), (long long)activityTime, isGamePaused);
-	
+		if (showAlbum2)
+		{
+			ChangeActivity2(isPlayingGame, songName, *IS_PV, GetDifficulty(), (long long)activityTime, isGamePaused);
+		}
+		else
+		{
+			ChangeActivity(isPlayingGame, songName, *IS_PV, GetDifficulty(), (long long)activityTime, isGamePaused);
+		}
 }
 
 signed __int64 hookedDivaSongStart(__int64 a1, __int64 a2)
@@ -84,6 +91,14 @@ signed __int64 hookedDivaSongStart(__int64 a1, __int64 a2)
 	isGamePaused = false;
 	divaSongStart(a1, a2);
 	playTime = 0;
+
+	auto song = GetSongData();
+	char isPlayingGame = song.songID == 999 ? 0 : *IS_PLAYING_GAME;
+	if (showAlbum2 && isPlayingGame != lastState)
+	{
+		StopDiscord();
+		SetupDiscord(song.songID);
+	}
 	OnGameStateChange();
 	return 0;
 }
@@ -173,7 +188,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 		std::cout << "Connecting to Discord" << std::endl;
 		SetConsoleTextAttribute(gConsole, 7);
 
-		SetupDiscord();
+		SetupDiscord(0);
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
@@ -189,6 +204,8 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 const wchar_t* CONFIG_FILE1 = getConfigFilePath();
 PluginConfig::PluginConfigOption config[] = {
 	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"show_rival_id", L"general", CONFIG_FILE1, L"Show Rival ID", L"Show your rival ID in your status.", false } },
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"show_albuns_art", L"general", CONFIG_FILE1, L"Show Albuns Art", L"Change from showing Skins to show the Albuns Art in your status.", false } },
+	{ PluginConfig::CONFIG_BOOLEAN, new PluginConfig::PluginConfigBooleanData{ L"change_extra", L"general", CONFIG_FILE1, L"Show Extra Extreme", L"Change from Ex Extreme to Extra Extreme in your status.", false } },
 };
 
 extern "C" __declspec(dllexport) LPCWSTR GetPluginName(void)
