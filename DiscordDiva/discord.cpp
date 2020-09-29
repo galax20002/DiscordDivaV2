@@ -443,7 +443,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 		std::cout << "] ";
 		std::cout << "ID: ";
 		SetConsoleTextAttribute(hConsole, 8);
-		std::cout << idOfSong;
+		std::cout << std::dec << idOfSong;
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << " - Chars: ";
 		SetConsoleTextAttribute(hConsole, 8);
@@ -714,7 +714,7 @@ void ChangeActivity2(int isPlaying, char* songName, int isPV, Difficulty difficu
 		std::cout << "] ";
 		std::cout << "ID: ";
 		SetConsoleTextAttribute(hConsole, 8);
-		std::cout << idOfSong;
+		std::cout << std::dec << idOfSong;
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << " - Chars: ";
 		SetConsoleTextAttribute(hConsole, 8);
