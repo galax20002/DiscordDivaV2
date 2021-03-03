@@ -11,7 +11,8 @@ This is a tweaked version from the original one! All credits go to bela333 for t
 
 ## Added Features
 - A visual difficulty indicator on the portait
-- Display a Portait for the 1st singer on that song (even if you change will show what you did pick ??)
+- Display the album art on discord
+- Display a Portait for the 1st singer on that song
 - Some special skins portraits (check the list [here](skins.md))
 - Added some new info on console if ative, and a new color for the plugin name.
 - Show your Rival ID though Discord Rich Presence
