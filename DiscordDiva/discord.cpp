@@ -634,7 +634,7 @@ void ChangeActivity(int isPlaying, char* songName, int isPV, Difficulty difficul
 	{
 		strcpy_s(activity.assets.large_image, "icon0");
 		strcpy_s(activity.assets.large_text, "");
-		strcpy_s(activity.details, "Waiting for a song!");
+		strcpy_s(activity.details, "Browsing songlist!");
 		if (showRivalId && accountid != 4294967295)
 		{
 			sprintf_s(activity.state, "Rival iD: %i", accountid);
